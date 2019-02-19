@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -14,8 +15,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -51,22 +55,21 @@ public class TimelineActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.d( "TwitterClient", "content is being refreshed");
+                Log.d("TwitterClient", "content is being refreshed");
                 populateHomeTimeline();
             }
         });
     }
 
     private void populateHomeTimeline() {
-        client.getHomeTimeline(new JsonHttpResponseHandler(){
+        client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
                 //Log.d("TwitterClient", response.toString());
                 List<Tweet> tweetsToAdd = new ArrayList<>();
 
-                for(int i = 0; i < response.length(); i++)
-                {
+                for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject jsonTweetObject = response.getJSONObject(i);
                         Tweet tweet = Tweet.fromJson(jsonTweetObject);
@@ -92,4 +95,7 @@ public class TimelineActivity extends AppCompatActivity {
         });
 
     }
+
+
+
 }
